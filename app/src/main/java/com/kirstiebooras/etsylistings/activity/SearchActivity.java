@@ -1,5 +1,6 @@
 package com.kirstiebooras.etsylistings.activity;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,15 +26,30 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
-    private static final String ENDPOINT = "https://api.etsy.com/v2/listings/active?includes=MainImage&api_key=%s";
-    private static final int LIMIT = 2;
+
+    private static final String SCHEME = "https";
+    private static final String ENDPOINT = "api.etsy.com/v2";
+    private static final String FIND_ALL_SHOP_LISTINGS_PATH = "listings/active";
+
+    private static final String INCLUDES_QUERY_PARAM = "includes";
+    private static final String API_KEY_QUERY_PARAM = "api_key";
+    private static final String LIMIT_QUERY_PARAM = "limit";
+    private static final String OFFSET_QUERY_PARAM = "offset";
+    private static final String KEYWORDS_QUERY_PARAM = "keywords";
+
+    private static final String RESULTS_ATTRIBUTE = "results";
+    private static final String TITLE_ATTRIBUTE = "title";
+    private static final String MAIN_IMAGE_ATTRIBUTE = "MainImage";
+    private static final String MEDIUM_IMAGE_ATTRIBUTE = "url_fullxfull";
+
+    private static final String STRING_SPLIT = "\\s+";
+    private static final char SEARCH_KEY_SEPARATOR = '+';
+    private static final int DEFAULT_LIMIT = 25;
 
     private int mOffset = 0; // update on scroll
 
@@ -67,21 +83,18 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void performSearch(String searchKey) {
-        String url = String.format(ENDPOINT, Config.ETSY_API_KEY);
-        JSONObject parameters = getParameters(searchKey, LIMIT, mOffset);
-
-        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, parameters,
+        String url = buildSearchUrl(searchKey, DEFAULT_LIMIT, mOffset);
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            JSONArray results = response.getJSONArray("results");
+                            JSONArray results = response.getJSONArray(RESULTS_ATTRIBUTE);
                             for (int i = 0; i < results.length(); i++) {
                                 JSONObject object = results.getJSONObject(i);
-                                String title = object.getString("title");
-                                String imageUrl = object.getJSONObject("MainImage").getString("url_75x75");
+                                String title = object.getString(TITLE_ATTRIBUTE);
+                                String imageUrl = object.getJSONObject(MAIN_IMAGE_ATTRIBUTE).getString(MEDIUM_IMAGE_ATTRIBUTE);
                                 mResults.add(new Result(title, imageUrl));
-                                Log.d(TAG, title + " " + imageUrl);
                             }
                             mResultAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
@@ -99,25 +112,25 @@ public class SearchActivity extends AppCompatActivity {
         mQueue.add(getRequest);
     }
 
-    /**
-     * Formats the search key to be compatible with the "keywords" header.
-     * @param searchKey the search key
-     * @return the formatted search key
-     */
-    private JSONObject getParameters(String searchKey, int limit, int offset) {
-        String[] split = searchKey.split("\\s+");
-        StringBuilder builder = new StringBuilder();
+    private String buildSearchUrl(String searchKey, int limit, int offset) {
+        String[] split = searchKey.split(STRING_SPLIT);
+        StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < split.length - 1; i++) {
-            builder.append(split[i]);
-            builder.append('+');
+            stringBuilder.append(split[i]);
+            stringBuilder.append(SEARCH_KEY_SEPARATOR);
         }
-        builder.append(split[split.length - 1]);
+        stringBuilder.append(split[split.length - 1]);
 
-        Map<String, String> params = new HashMap<>();
-        params.put("keywords", builder.toString());
-        params.put("limit", String.valueOf(limit));
-        params.put("offset", String.valueOf(offset));
-
-        return new JSONObject(params);
+        Uri.Builder uriBuilder = new Uri.Builder();
+        uriBuilder.scheme(SCHEME)
+                .encodedAuthority(ENDPOINT)
+                .encodedPath(FIND_ALL_SHOP_LISTINGS_PATH)
+                .appendQueryParameter(INCLUDES_QUERY_PARAM, MAIN_IMAGE_ATTRIBUTE)
+                .appendQueryParameter(API_KEY_QUERY_PARAM, Config.ETSY_API_KEY)
+                .appendQueryParameter(LIMIT_QUERY_PARAM, String.valueOf(limit))
+                .appendQueryParameter(OFFSET_QUERY_PARAM, String.valueOf(offset))
+                .appendQueryParameter(KEYWORDS_QUERY_PARAM, stringBuilder.toString());
+        return uriBuilder.build().toString();
     }
+
 }

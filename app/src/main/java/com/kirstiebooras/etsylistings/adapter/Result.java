@@ -8,8 +8,9 @@ public class Result {
     private String mTitle;
     private String mImageUrl;
 
-    public Result(String title, String mImageUrl) {
+    public Result(String title, String imageUrl) {
         mTitle = title;
+        mImageUrl = imageUrl;
     }
 
     public String getTitle() {
