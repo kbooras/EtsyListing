@@ -1,9 +1,8 @@
 package com.kirstiebooras.etsylistings.service;
 
 /**
- * Created by kirstiebooras on 9/28/16.
+ * A base Etsy API request.
  */
-
 public class EtsyBaseRequest {
 
     static final String SCHEME = "https";
@@ -12,7 +11,6 @@ public class EtsyBaseRequest {
     static final String API_KEY_QUERY_PARAM = "api_key";
     static final String LIMIT_QUERY_PARAM = "limit";
     static final String OFFSET_QUERY_PARAM = "offset";
-    static final String KEYWORDS_QUERY_PARAM = "keywords";
     static final String MAIN_IMAGE_ATTRIBUTE = "MainImage";
 
 }

@@ -8,6 +8,10 @@ public class FindAllActiveListingsRequest extends EtsyBaseRequest {
 
     private static final String FIND_ALL_SHOP_LISTINGS_PATH = "listings/active";
 
+    private static final String KEYWORDS_QUERY_PARAM = "keywords";
+    private static final String SORT_ON_QUERY_PARAM = "sort_on";
+    private static final String SORT_ON_SCORE = "score";
+
     private String mSearchKey;
     private int mOffset;
     private int mLimit;
@@ -57,6 +61,7 @@ public class FindAllActiveListingsRequest extends EtsyBaseRequest {
                 .appendQueryParameter(API_KEY_QUERY_PARAM, Config.ETSY_API_KEY)
                 .appendQueryParameter(LIMIT_QUERY_PARAM, String.valueOf(mLimit))
                 .appendQueryParameter(OFFSET_QUERY_PARAM, String.valueOf(mOffset))
+                .appendQueryParameter(SORT_ON_QUERY_PARAM, SORT_ON_SCORE)
                 .appendQueryParameter(KEYWORDS_QUERY_PARAM, mSearchKey.replaceAll("\\s+", "+"));
         return uriBuilder.build().toString();
     }
