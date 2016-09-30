@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import com.kirstiebooras.etsylistings.config.Config;
 
+import java.util.Locale;
+
 /**
  * Request for Etsy findAllListingActive API. Returns an array of active listings.
  */
@@ -13,6 +15,7 @@ public class FindAllListingActiveRequest extends EtsyBaseRequest {
 
     private static final String KEYWORDS_QUERY_PARAM = "keywords";
     private static final String SORT_ON_QUERY_PARAM = "sort_on";
+    private static final String LOCATION_QUERY_PARAM = "location";
     private static final String SORT_ON_SCORE = "score";
 
     private String mSearchKey;
@@ -57,6 +60,7 @@ public class FindAllListingActiveRequest extends EtsyBaseRequest {
 
     public String getSearchUrl() {
         Uri.Builder uriBuilder = new Uri.Builder();
+        String location = Locale.getDefault().getCountry();
         uriBuilder.scheme(SCHEME)
                 .encodedAuthority(ENDPOINT)
                 .encodedPath(FIND_ALL_SHOP_LISTINGS_PATH)
@@ -65,6 +69,7 @@ public class FindAllListingActiveRequest extends EtsyBaseRequest {
                 .appendQueryParameter(LIMIT_QUERY_PARAM, String.valueOf(mLimit))
                 .appendQueryParameter(OFFSET_QUERY_PARAM, String.valueOf(mOffset))
                 .appendQueryParameter(SORT_ON_QUERY_PARAM, SORT_ON_SCORE)
+                .appendQueryParameter(LOCATION_QUERY_PARAM, location)
                 .appendQueryParameter(KEYWORDS_QUERY_PARAM, mSearchKey.replaceAll("\\s+", "+"));
         return uriBuilder.build().toString();
     }
