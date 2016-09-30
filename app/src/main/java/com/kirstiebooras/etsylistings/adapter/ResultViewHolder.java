@@ -12,16 +12,20 @@ import com.kirstiebooras.etsylistings.R;
  */
 public class ResultViewHolder extends RecyclerView.ViewHolder {
 
-    private ImageView mThumbnail;
+    private ImageView mImageView;
     private TextView mTitle;
 
     public ResultViewHolder(View itemView) {
         super(itemView);
-        mThumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
+        mImageView = (ImageView) itemView.findViewById(R.id.thumbnail);
         mTitle = (TextView) itemView.findViewById(R.id.title);
     }
 
-    public void bindView(Result result) {
-        mTitle.setText(result.getTitle());
+    public void setTitle(String title) {
+        mTitle.setText(title);
+    }
+
+    public ImageView getImageView() {
+        return mImageView;
     }
 }

@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.kirstiebooras.etsylistings.R;
+import com.kirstiebooras.etsylistings.model.Result;
 
 import java.util.List;
 
@@ -15,9 +17,11 @@ import java.util.List;
  */
 public class ResultAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
+    private Context mContext;
     private List<Result> mResultList;
 
-    public ResultAdapter(List<Result> resultList) {
+    public ResultAdapter(Context context, List<Result> resultList) {
+        mContext = context;
         mResultList = resultList;
     }
 
@@ -30,7 +34,11 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int position) {
-        // set view items
+        holder.setTitle(mResultList.get(position).getTitle());
+        Glide.with(mContext)
+                .load(mResultList.get(position).getMainImage().getFullUrl())
+                .into(holder.getImageView());
+
     }
 
     @Override

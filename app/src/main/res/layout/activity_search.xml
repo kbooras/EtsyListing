@@ -21,6 +21,7 @@
         android:id="@+id/results_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:background="@color/lightGrey"/>
 
 </LinearLayout>

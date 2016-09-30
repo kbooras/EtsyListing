@@ -3,7 +3,6 @@ package com.kirstiebooras.etsylistings.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
+
+    private static final int NUM_COLUMNS = 2;
 
     private EtsyService mService;
     private List<Result> mResults;
@@ -45,9 +46,9 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         mResults = new ArrayList<>();
-        mResultAdapter = new ResultAdapter(mResults);
+        mResultAdapter = new ResultAdapter(getApplicationContext(), mResults);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, NUM_COLUMNS);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.results_view);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mResultAdapter);
