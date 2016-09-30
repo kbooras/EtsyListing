@@ -33,6 +33,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int position) {
+// Todo t1 : you should also figure out a way to remove the previous glide task incase there is one
         holder.bindView(mContext, mResultList.get(position));
     }
 

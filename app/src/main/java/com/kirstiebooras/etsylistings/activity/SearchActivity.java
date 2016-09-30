@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.kirstiebooras.etsylistings.R;
+import com.kirstiebooras.etsylistings.adapter.ResultOnScrollListener;
 import com.kirstiebooras.etsylistings.model.Result;
 import com.kirstiebooras.etsylistings.adapter.ResultAdapter;
 import com.kirstiebooras.etsylistings.service.EtsyService;
@@ -21,10 +22,13 @@ import java.util.List;
 public class SearchActivity extends AppCompatActivity {
 
     private static final int NUM_COLUMNS = 2;
+    private static final int OFFSET = 24;
+    private static final int STARTING_OFFSET = 0;
 
     private EtsyService mService;
     private List<Result> mResults;
     private ResultAdapter mResultAdapter;
+    private String mCurrentSearchKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,8 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         mService = new EtsyService(this);
+        mResults = new ArrayList<>();
+        mResultAdapter = new ResultAdapter(getApplicationContext(), mResults);
 
         final EditText searchBar = (EditText) findViewById(R.id.search_bar);
         Button button = (Button) findViewById(R.id.button);
@@ -41,22 +47,26 @@ public class SearchActivity extends AppCompatActivity {
                 if (mResults != null) {
                     mResults.clear();
                 }
-                performSearch(searchBar.getText().toString());
+                mCurrentSearchKey = searchBar.getText().toString();
+                performSearch(mCurrentSearchKey, STARTING_OFFSET);
             }
         });
 
-        mResults = new ArrayList<>();
-        mResultAdapter = new ResultAdapter(getApplicationContext(), mResults);
-
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, NUM_COLUMNS);
+        GridLayoutManager mLayoutManager = new GridLayoutManager(this, NUM_COLUMNS);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.results_view);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mResultAdapter);
+        recyclerView.addOnScrollListener(new ResultOnScrollListener(mLayoutManager, OFFSET) {
+            @Override
+            public void onLoadMore(int currentOffset) {
+                performSearch(mCurrentSearchKey, currentOffset);
+            }
+        });
     }
 
-    private void performSearch(String searchKey) {
+    private void performSearch(String searchKey, int offset) {
         FindAllListingActiveRequest.Builder builder =
-                new FindAllListingActiveRequest.Builder(searchKey);
+                new FindAllListingActiveRequest.Builder(searchKey).withOffset(offset);
         FindAllListingActiveRequest request = builder.build();
         mService.findAllActiveListings(request, new FindAllListingActiveListener() {
             @Override
