@@ -4,7 +4,10 @@ import android.net.Uri;
 
 import com.kirstiebooras.etsylistings.config.Config;
 
-public class FindAllActiveListingsRequest extends EtsyBaseRequest {
+/**
+ * Request for Etsy findAllListingActive API. Returns an array of active listings.
+ */
+public class FindAllListingActiveRequest extends EtsyBaseRequest {
 
     private static final String FIND_ALL_SHOP_LISTINGS_PATH = "listings/active";
 
@@ -16,7 +19,7 @@ public class FindAllActiveListingsRequest extends EtsyBaseRequest {
     private int mOffset;
     private int mLimit;
 
-    private FindAllActiveListingsRequest(String searchKey, int offset, int limit) {
+    private FindAllListingActiveRequest(String searchKey, int offset, int limit) {
         mSearchKey = searchKey;
         mOffset = offset;
         mLimit = limit;
@@ -47,8 +50,8 @@ public class FindAllActiveListingsRequest extends EtsyBaseRequest {
             return this;
         }
 
-        public FindAllActiveListingsRequest build() {
-            return new FindAllActiveListingsRequest(mSearchKey, mOffset, mLimit);
+        public FindAllListingActiveRequest build() {
+            return new FindAllListingActiveRequest(mSearchKey, mOffset, mLimit);
         }
     }
 

@@ -4,7 +4,7 @@ import com.kirstiebooras.etsylistings.model.Result;
 
 import java.util.List;
 
-public interface FindAllActiveListingsListener {
+public interface FindAllListingActiveListener {
 
     void onResult(List<Result> results);
 }

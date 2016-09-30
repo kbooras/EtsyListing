@@ -37,8 +37,8 @@ public class EtsyService {
         mMapper = new ObjectMapper();
     }
 
-    public void findAllActiveListings(FindAllActiveListingsRequest request,
-                                      final FindAllActiveListingsListener listingsListener) {
+    public void findAllActiveListings(FindAllListingActiveRequest request,
+                                      final FindAllListingActiveListener listingsListener) {
         JsonObjectRequest getRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 request.getSearchUrl(),

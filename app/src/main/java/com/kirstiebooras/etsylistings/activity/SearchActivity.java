@@ -12,8 +12,8 @@ import com.kirstiebooras.etsylistings.R;
 import com.kirstiebooras.etsylistings.model.Result;
 import com.kirstiebooras.etsylistings.adapter.ResultAdapter;
 import com.kirstiebooras.etsylistings.service.EtsyService;
-import com.kirstiebooras.etsylistings.service.FindAllActiveListingsListener;
-import com.kirstiebooras.etsylistings.service.FindAllActiveListingsRequest;
+import com.kirstiebooras.etsylistings.service.FindAllListingActiveListener;
+import com.kirstiebooras.etsylistings.service.FindAllListingActiveRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,10 +55,10 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void performSearch(String searchKey) {
-        FindAllActiveListingsRequest.Builder builder =
-                new FindAllActiveListingsRequest.Builder(searchKey);
-        FindAllActiveListingsRequest request = builder.build();
-        mService.findAllActiveListings(request, new FindAllActiveListingsListener() {
+        FindAllListingActiveRequest.Builder builder =
+                new FindAllListingActiveRequest.Builder(searchKey);
+        FindAllListingActiveRequest request = builder.build();
+        mService.findAllActiveListings(request, new FindAllListingActiveListener() {
             @Override
             public void onResult(List<Result> results) {
                 mResults.addAll(results);
