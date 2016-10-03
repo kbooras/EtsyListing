@@ -25,6 +25,7 @@ import com.kirstiebooras.etsylistings.service.FindAllFeaturedListingsListener;
 import com.kirstiebooras.etsylistings.service.FindAllFeaturedListingsRequest;
 import com.kirstiebooras.etsylistings.service.FindAllListingActiveListener;
 import com.kirstiebooras.etsylistings.service.FindAllListingActiveRequest;
+import com.kirstiebooras.etsylistings.view.SearchEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class SearchActivity extends AppCompatActivity {
     private ResultAdapter mResultAdapter;
     private String mCurrentSearchKey;
 
-    private EditText mSearchEditText;
+    private SearchEditText mSearchEditText;
     private TextWatcher mTextChangedListener;
 
     private RecyclerView mRecyclerView;
@@ -58,7 +59,23 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
-        mSearchEditText = (EditText) findViewById(R.id.search_edit_text);
+        mSearchEditText = (SearchEditText) findViewById(R.id.search_edit_text);
+        mSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    mSearchEditText.clearFocus();
+                    InputMethodManager inputManager =
+                            (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
+
+                    displayResultsForNewQuery();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         mTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -70,10 +87,9 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                showSearchCancelButton(mSearchEditText, editable.length() > 0);
+                mSearchEditText.showCancelButton(editable.length() > 0);
             }
         };
-        setupSearchEditTextListeners();
 
         mGridLayoutManager = new GridLayoutManager(this, NUM_COLUMNS);
         mRecyclerView = (RecyclerView) findViewById(R.id.results_view);
@@ -105,45 +121,21 @@ public class SearchActivity extends AppCompatActivity {
         mResultAdapter.notifyDataSetChanged();
     }
 
-    private void setupSearchEditTextListeners() {
-        mSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    mSearchEditText.clearFocus();
-                    InputMethodManager inputManager =
-                            (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputManager.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
+    private void displayResultsForNewQuery() {
+        if (mResults != null) {
+            mResults.clear();
+        }
 
-                    displayResultsForNewQuery();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        mSearchEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                showSearchCancelButton(mSearchEditText,
-                        hasFocus && mSearchEditText.getText().length() > 0);
-            }
-        });
-
-        mSearchEditText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                final int DRAWABLE_LEFT = 0;
-
-                if(event.getAction() == MotionEvent.ACTION_UP &&
-                        event.getX() <= mSearchEditText
-                                .getCompoundDrawables()[DRAWABLE_LEFT].getBounds().width()) {
-                    mSearchEditText.setText("");
-                    return true;
-                }
-                return false;
-            }
-        });
+        mCurrentSearchKey = mSearchEditText.getText().toString();
+        if (mCurrentSearchKey.equals("")) {
+            showFeaturedListings(STARTING_OFFSET);
+            mRecyclerView.clearOnScrollListeners();
+            mRecyclerView.addOnScrollListener(getFeaturedListingsOnScrollListener());
+        } else {
+            performSearch(mCurrentSearchKey, STARTING_OFFSET);
+            mRecyclerView.clearOnScrollListeners();
+            mRecyclerView.addOnScrollListener(getSearchOnScrollListener());
+        }
     }
 
     private ResultOnScrollListener getFeaturedListingsOnScrollListener() {
@@ -162,33 +154,6 @@ public class SearchActivity extends AppCompatActivity {
                 performSearch(mCurrentSearchKey, currentOffset);
             }
         };
-    }
-
-    private void displayResultsForNewQuery() {
-        if (mResults != null) {
-            mResults.clear();
-        }
-
-        mCurrentSearchKey = mSearchEditText.getText().toString();
-        if (mCurrentSearchKey.equals("")) {
-            showFeaturedListings(STARTING_OFFSET);
-            mRecyclerView.clearOnScrollListeners();
-            mRecyclerView.addOnScrollListener(getFeaturedListingsOnScrollListener());
-        } else {
-            performSearch(mCurrentSearchKey, STARTING_OFFSET);
-            mRecyclerView.clearOnScrollListeners();
-            mRecyclerView.addOnScrollListener(getSearchOnScrollListener());
-        }
-    }
-
-    private void showSearchCancelButton(EditText searchEditText, boolean show) {
-        int drawableLeft;
-        if (show) {
-            drawableLeft = R.drawable.ic_cancel;
-        } else {
-            drawableLeft = R.drawable.ic_magnifying_glass;
-        }
-        searchEditText.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, 0, 0, 0);
     }
 
     private void performSearch(String searchKey, int offset) {
