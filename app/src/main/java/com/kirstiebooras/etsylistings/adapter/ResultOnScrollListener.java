@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
  */
 public abstract class ResultOnScrollListener extends RecyclerView.OnScrollListener {
 
-    private static final int LOADING_THRESHOLD = 4;
+    private static final int LOADING_THRESHOLD = 10;
 
     private GridLayoutManager mLayoutManager;
     private int mOffset;
