@@ -3,71 +3,64 @@ package com.kirstiebooras.etsylistings.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.Validate;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * POJO encapsulating search result.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Result implements Parcelable {
 
-    @JsonProperty("title")
     private String mTitle;
-
-    @JsonProperty("MainImage")
-    private MainImage mMainImage;
-
-    @JsonProperty("currency_code")
     private String mCurrencyCode;
-
-    @JsonProperty("price")
     private String mPrice;
-
-    @JsonProperty("listing_id")
+    private MainImage mMainImage;
     private int mListingId;
 
-    public Result() {
+    public Result(JSONObject object) throws JSONException, NullPointerException {
+        String title = object.getString("title");
+        String currencyCode = object.getString("currency_code");
+        String price = object.getString("price");
+        MainImage mainImage = new MainImage(object.getJSONObject("MainImage"));
+        int listingId = object.getInt("listing_id");
+
+        init(title, currencyCode, price, mainImage, listingId);
     }
 
-    public void setTitle(String title) {
+    private void init(String title, String currencyCode, String price,
+                      MainImage mainImage, int listingId)
+            throws NullPointerException {
+        Validate.notNull(title, "Title cannot be null");
+        Validate.notNull(currencyCode, "CurrencyCode cannot be null");
+        Validate.notNull(price, "Price cannot be null");
+        Validate.notNull(mainImage, "MainImage cannot be null");
+        Validate.notNull(listingId, "ListingId cannot be null");
         mTitle = title;
+        mCurrencyCode = currencyCode;
+        mPrice = price;
+        mMainImage = mainImage;
+        mListingId = listingId;
     }
 
     public String getTitle() {
         return  mTitle;
     }
 
-    public void setMainImage(MainImage mainImage) {
-        mMainImage = mainImage;
-    }
-
-    public MainImage getMainImage() {
-        return mMainImage;
-    }
-
     public String getCurrencyCode() {
         return mCurrencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        mCurrencyCode = currencyCode;
-    }
-
-    public void setPrice(String price) {
-        mPrice = price;
     }
 
     public String getPrice() {
         return mPrice;
     }
 
-    public int getListingId() {
-        return mListingId;
+    public MainImage getMainImage() {
+        return mMainImage;
     }
 
-    public void setListingId(int listingId) {
-        mListingId = listingId;
+    public int getListingId() {
+        return mListingId;
     }
 
     @Override

@@ -3,23 +3,25 @@ package com.kirstiebooras.etsylistings.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.Validate;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * POJO encapsulating search result's image.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class MainImage implements Parcelable {
 
-    @JsonProperty("url_fullxfull")
     private String mFullUrl;
 
-    public MainImage() {
+    public MainImage(JSONObject object) throws JSONException, NullPointerException {
+        String fullUrl = object.getString("url_fullxfull");
+        init(fullUrl);
     }
 
-    public void setFullUrl(String url) {
-        mFullUrl = url;
+    private void init(String fullUrl) throws NullPointerException {
+        Validate.notNull(fullUrl, "Full URL cannot be null");
+        mFullUrl = fullUrl;
     }
 
     public String getFullUrl() {

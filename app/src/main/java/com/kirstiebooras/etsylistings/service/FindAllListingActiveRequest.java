@@ -28,7 +28,7 @@ public class FindAllListingActiveRequest extends EtsyBaseRequest {
     public static class Builder {
 
         private static final int DEFAULT_OFFSET = 0;
-        private static final int DEFAULT_LIMIT = 25;
+        private static final int DEFAULT_LIMIT = 24;
 
         private String mSearchKey;
         private int mOffset;

@@ -21,6 +21,8 @@ import com.kirstiebooras.etsylistings.adapter.ResultOnScrollListener;
 import com.kirstiebooras.etsylistings.model.Result;
 import com.kirstiebooras.etsylistings.adapter.ResultAdapter;
 import com.kirstiebooras.etsylistings.service.EtsyService;
+import com.kirstiebooras.etsylistings.service.FindAllFeaturedListingsListener;
+import com.kirstiebooras.etsylistings.service.FindAllFeaturedListingsRequest;
 import com.kirstiebooras.etsylistings.service.FindAllListingActiveListener;
 import com.kirstiebooras.etsylistings.service.FindAllListingActiveRequest;
 
@@ -41,6 +43,10 @@ public class SearchActivity extends AppCompatActivity {
 
     private EditText mSearchEditText;
     private TextWatcher mTextChangedListener;
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.OnScrollListener mFeaturedListingsOnScrollListener;
+    private RecyclerView.OnScrollListener mSearchResultsOnScrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,15 +77,26 @@ public class SearchActivity extends AppCompatActivity {
         setupSearchEditTextListeners();
 
         GridLayoutManager mLayoutManager = new GridLayoutManager(this, NUM_COLUMNS);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.results_view);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setAdapter(mResultAdapter);
-        recyclerView.addOnScrollListener(new ResultOnScrollListener(mLayoutManager, OFFSET) {
+        mRecyclerView = (RecyclerView) findViewById(R.id.results_view);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mResultAdapter);
+
+        mFeaturedListingsOnScrollListener = new ResultOnScrollListener(mLayoutManager, OFFSET) {
+            @Override
+            public void onLoadMore(int currentOffset) {
+                showFeaturedListings(currentOffset);
+            }
+        };
+
+        mSearchResultsOnScrollListener = new ResultOnScrollListener(mLayoutManager, OFFSET) {
             @Override
             public void onLoadMore(int currentOffset) {
                 performSearch(mCurrentSearchKey, currentOffset);
             }
-        });
+        };
+
+        showFeaturedListings(STARTING_OFFSET);
+        mRecyclerView.addOnScrollListener(mFeaturedListingsOnScrollListener);
     }
 
     @Override
@@ -119,6 +136,9 @@ public class SearchActivity extends AppCompatActivity {
 
                     mCurrentSearchKey = mSearchEditText.getText().toString();
                     performSearch(mCurrentSearchKey, STARTING_OFFSET);
+
+                    mRecyclerView.clearOnScrollListeners();
+                    mRecyclerView.addOnScrollListener(mSearchResultsOnScrollListener);
                     return true;
                 }
                 return false;
@@ -164,6 +184,18 @@ public class SearchActivity extends AppCompatActivity {
                 new FindAllListingActiveRequest.Builder(searchKey).withOffset(offset);
         FindAllListingActiveRequest request = builder.build();
         mService.findAllActiveListings(request, new FindAllListingActiveListener() {
+            @Override
+            public void onResult(List<Result> results) {
+                mResults.addAll(results);
+                mResultAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void showFeaturedListings(int offset) {
+        FindAllFeaturedListingsRequest request =
+                new FindAllFeaturedListingsRequest.Builder().withOffset(offset).build();
+        mService.findAllFeaturedListings(request, new FindAllFeaturedListingsListener() {
             @Override
             public void onResult(List<Result> results) {
                 mResults.addAll(results);

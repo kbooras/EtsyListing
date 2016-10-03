@@ -18,7 +18,7 @@ public class FindAllFeaturedListingsRequest extends EtsyBaseRequest {
     public static class Builder {
 
         private static final int DEFAULT_OFFSET = 0;
-        private static final int DEFAULT_LIMIT = 25;
+        private static final int DEFAULT_LIMIT = 24;
 
         private int mOffset;
         private int mLimit;
