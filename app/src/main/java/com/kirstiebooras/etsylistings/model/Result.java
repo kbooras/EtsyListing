@@ -1,5 +1,8 @@
 package com.kirstiebooras.etsylistings.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -7,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * POJO encapsulating search result.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Result {
+public class Result implements Parcelable {
 
     @JsonProperty("title")
     private String mTitle;
@@ -65,5 +68,37 @@ public class Result {
 
     public void setListingId(int listingId) {
         mListingId = listingId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mTitle);
+        dest.writeValue(mMainImage);
+        dest.writeString(mCurrencyCode);
+        dest.writeString(mPrice);
+        dest.writeInt(mListingId);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Result createFromParcel(Parcel in) {
+            return new Result(in);
+        }
+
+        public Result[] newArray(int size) {
+            return new Result[size];
+        }
+    };
+
+    private Result(Parcel in) {
+        mTitle = in.readString();
+        mMainImage = (MainImage) in.readValue(MainImage.class.getClassLoader());
+        mCurrencyCode = in.readString();
+        mPrice = in.readString();
+        mListingId = in.readInt();
     }
 }

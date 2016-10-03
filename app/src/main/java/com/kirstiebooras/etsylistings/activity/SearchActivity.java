@@ -29,12 +29,13 @@ import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
 
+    private static final String RESULTS_KEY = "results";
     private static final int NUM_COLUMNS = 2;
     private static final int OFFSET = 24;
     private static final int STARTING_OFFSET = 0;
 
     private EtsyService mService;
-    private List<Result> mResults;
+    private ArrayList<Result> mResults;
     private ResultAdapter mResultAdapter;
     private String mCurrentSearchKey;
 
@@ -45,7 +46,6 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
         mService = new EtsyService(this);
         mResults = new ArrayList<>();
         mResultAdapter = new ResultAdapter(getApplicationContext(), mResults);
@@ -85,7 +85,22 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Text changed listener must be added in onResume since rotation triggers onTextChanged()
         mSearchEditText.addTextChangedListener(mTextChangedListener);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(RESULTS_KEY, mResults);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        List<Result> mResultList = savedInstanceState.getParcelableArrayList(RESULTS_KEY);
+        mResults.addAll(mResultList);
+        mResultAdapter.notifyDataSetChanged();
     }
 
     private void setupSearchEditTextListeners() {
