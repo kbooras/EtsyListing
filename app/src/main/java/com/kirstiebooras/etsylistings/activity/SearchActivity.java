@@ -45,8 +45,7 @@ public class SearchActivity extends AppCompatActivity {
     private TextWatcher mTextChangedListener;
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.OnScrollListener mFeaturedListingsOnScrollListener;
-    private RecyclerView.OnScrollListener mSearchResultsOnScrollListener;
+    private GridLayoutManager mGridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,27 +75,13 @@ public class SearchActivity extends AppCompatActivity {
         };
         setupSearchEditTextListeners();
 
-        GridLayoutManager mLayoutManager = new GridLayoutManager(this, NUM_COLUMNS);
+        mGridLayoutManager = new GridLayoutManager(this, NUM_COLUMNS);
         mRecyclerView = (RecyclerView) findViewById(R.id.results_view);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
         mRecyclerView.setAdapter(mResultAdapter);
 
-        mFeaturedListingsOnScrollListener = new ResultOnScrollListener(mLayoutManager, OFFSET) {
-            @Override
-            public void onLoadMore(int currentOffset) {
-                showFeaturedListings(currentOffset);
-            }
-        };
-
-        mSearchResultsOnScrollListener = new ResultOnScrollListener(mLayoutManager, OFFSET) {
-            @Override
-            public void onLoadMore(int currentOffset) {
-                performSearch(mCurrentSearchKey, currentOffset);
-            }
-        };
-
         showFeaturedListings(STARTING_OFFSET);
-        mRecyclerView.addOnScrollListener(mFeaturedListingsOnScrollListener);
+        mRecyclerView.addOnScrollListener(getFeaturedListingsOnScrollListener());
     }
 
     @Override
@@ -125,20 +110,12 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (mResults != null) {
-                        mResults.clear();
-                    }
-
                     mSearchEditText.clearFocus();
                     InputMethodManager inputManager =
                             (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputManager.hideSoftInputFromWindow(mSearchEditText.getWindowToken(), 0);
 
-                    mCurrentSearchKey = mSearchEditText.getText().toString();
-                    performSearch(mCurrentSearchKey, STARTING_OFFSET);
-
-                    mRecyclerView.clearOnScrollListeners();
-                    mRecyclerView.addOnScrollListener(mSearchResultsOnScrollListener);
+                    displayResultsForNewQuery();
                     return true;
                 }
                 return false;
@@ -167,6 +144,41 @@ public class SearchActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private ResultOnScrollListener getFeaturedListingsOnScrollListener() {
+        return new ResultOnScrollListener(mGridLayoutManager, OFFSET) {
+            @Override
+            public void onLoadMore(int currentOffset) {
+                showFeaturedListings(currentOffset);
+            }
+        };
+    }
+
+    private ResultOnScrollListener getSearchOnScrollListener() {
+        return new ResultOnScrollListener(mGridLayoutManager, OFFSET) {
+            @Override
+            public void onLoadMore(int currentOffset) {
+                performSearch(mCurrentSearchKey, currentOffset);
+            }
+        };
+    }
+
+    private void displayResultsForNewQuery() {
+        if (mResults != null) {
+            mResults.clear();
+        }
+
+        mCurrentSearchKey = mSearchEditText.getText().toString();
+        if (mCurrentSearchKey.equals("")) {
+            showFeaturedListings(STARTING_OFFSET);
+            mRecyclerView.clearOnScrollListeners();
+            mRecyclerView.addOnScrollListener(getFeaturedListingsOnScrollListener());
+        } else {
+            performSearch(mCurrentSearchKey, STARTING_OFFSET);
+            mRecyclerView.clearOnScrollListeners();
+            mRecyclerView.addOnScrollListener(getSearchOnScrollListener());
+        }
     }
 
     private void showSearchCancelButton(EditText searchEditText, boolean show) {
