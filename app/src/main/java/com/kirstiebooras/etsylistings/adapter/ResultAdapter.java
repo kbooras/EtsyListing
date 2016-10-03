@@ -1,12 +1,14 @@
 package com.kirstiebooras.etsylistings.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kirstiebooras.etsylistings.R;
+import com.kirstiebooras.etsylistings.activity.WebViewActivity;
 import com.kirstiebooras.etsylistings.model.Result;
 
 import java.util.List;
@@ -33,8 +35,16 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultViewHolder> {
 
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int position) {
-// Todo t1 : you should also figure out a way to remove the previous glide task incase there is one
         holder.bindView(mContext, mResultList.get(position));
+        final int listingId = mResultList.get(position).getListingId();
+        holder.getContainer().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, WebViewActivity.class);
+                intent.putExtra(WebViewActivity.LISTING_ID_EXTRA, listingId);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
