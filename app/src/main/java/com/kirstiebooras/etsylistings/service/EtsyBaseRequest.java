@@ -13,4 +13,11 @@ public class EtsyBaseRequest {
     static final String OFFSET_QUERY_PARAM = "offset";
     static final String MAIN_IMAGE_ATTRIBUTE = "MainImage";
 
+    int mOffset;
+    int mLimit;
+
+    EtsyBaseRequest(int offset, int limit) {
+        mOffset = offset;
+        mLimit = limit;
+    }
 }

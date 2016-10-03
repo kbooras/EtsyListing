@@ -1,8 +1,10 @@
 package com.kirstiebooras.etsylistings.service;
 
-/**
- * Created by kirstiebooras on 10/1/16.
- */
+import com.kirstiebooras.etsylistings.model.Result;
 
-public class FindAllFeaturedListingsListener {
+import java.util.List;
+
+public interface FindAllFeaturedListingsListener {
+
+    void onResult(List<Result> results);
 }

@@ -19,13 +19,10 @@ public class FindAllListingActiveRequest extends EtsyBaseRequest {
     private static final String SORT_ON_SCORE = "score";
 
     private String mSearchKey;
-    private int mOffset;
-    private int mLimit;
 
     private FindAllListingActiveRequest(String searchKey, int offset, int limit) {
+        super(offset, limit);
         mSearchKey = searchKey;
-        mOffset = offset;
-        mLimit = limit;
     }
 
     public static class Builder {
