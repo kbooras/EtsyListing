@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ed8748</color>
-    <color name="colorPrimaryDark">#ec7730</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="resultsBackground">#eceae6</color>
-    <color name="searchBoxColor">#ffffff</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#BEBEBE</color>
+    <color name="colorAccent">#34A7C3</color>
+    <color name="resultsBackground">#FAFAF5</color>
+    <color name="searchBoxColor">#FAFAF5</color>
+    <color name="searchBoxOutline">#CACACA</color>
+    <color name="searchBoxOutlineFocused">#BEBEBE</color>
 </resources>
