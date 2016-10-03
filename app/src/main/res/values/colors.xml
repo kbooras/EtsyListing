@@ -5,6 +5,6 @@
     <color name="colorAccent">#34A7C3</color>
     <color name="resultsBackground">#FAFAF5</color>
     <color name="searchBoxColor">#FAFAF5</color>
-    <color name="searchBoxOutline">#CACACA</color>
-    <color name="searchBoxOutlineFocused">#BEBEBE</color>
+    <color name="searchBoxOutline">#BEBEBE</color>
+    <color name="searchBoxOutlineFocused">#606060</color>
 </resources>
