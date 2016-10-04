@@ -45,11 +45,6 @@ public class FindAllListingActiveRequest extends EtsyBaseRequest {
             return this;
         }
 
-        public Builder withLimit(int limit) {
-            mLimit = limit;
-            return this;
-        }
-
         public FindAllListingActiveRequest build() {
             return new FindAllListingActiveRequest(mSearchKey, mOffset, mLimit);
         }

@@ -3,7 +3,7 @@ package com.kirstiebooras.etsylistings.service;
 /**
  * A base Etsy API request.
  */
-public class EtsyBaseRequest {
+class EtsyBaseRequest {
 
     static final String SCHEME = "https";
     static final String ENDPOINT = "api.etsy.com/v2";

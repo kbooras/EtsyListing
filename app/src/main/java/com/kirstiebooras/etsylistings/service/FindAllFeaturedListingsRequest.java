@@ -33,11 +33,6 @@ public class FindAllFeaturedListingsRequest extends EtsyBaseRequest {
             return this;
         }
 
-        public Builder withLimit(int limit) {
-            mLimit = limit;
-            return this;
-        }
-
         public FindAllFeaturedListingsRequest build() {
             return new FindAllFeaturedListingsRequest(mOffset, mLimit);
         }
