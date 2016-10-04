@@ -1,4 +1,4 @@
-package com.kirstiebooras.etsylistings.service;
+package com.kbooras.etsylistings.service;
 
 /**
  * A base Etsy API request.

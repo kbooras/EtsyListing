@@ -1,6 +1,6 @@
-package com.kirstiebooras.etsylistings.service;
+package com.kbooras.etsylistings.service;
 
-import com.kirstiebooras.etsylistings.model.Result;
+import com.kbooras.etsylistings.model.Result;
 
 import java.util.List;
 

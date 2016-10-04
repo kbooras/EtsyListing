@@ -1,4 +1,4 @@
-package com.kirstiebooras.etsylistings.activity;
+package com.kbooras.etsylistings.activity;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
@@ -13,16 +13,16 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
-import com.kirstiebooras.etsylistings.R;
-import com.kirstiebooras.etsylistings.adapter.ResultOnScrollListener;
-import com.kirstiebooras.etsylistings.model.Result;
-import com.kirstiebooras.etsylistings.adapter.ResultAdapter;
-import com.kirstiebooras.etsylistings.service.EtsyService;
-import com.kirstiebooras.etsylistings.service.FindAllFeaturedListingsListener;
-import com.kirstiebooras.etsylistings.service.FindAllFeaturedListingsRequest;
-import com.kirstiebooras.etsylistings.service.FindAllListingActiveListener;
-import com.kirstiebooras.etsylistings.service.FindAllListingActiveRequest;
-import com.kirstiebooras.etsylistings.view.SearchEditText;
+import com.kbooras.etsylistings.R;
+import com.kbooras.etsylistings.adapter.ResultOnScrollListener;
+import com.kbooras.etsylistings.model.Result;
+import com.kbooras.etsylistings.adapter.ResultAdapter;
+import com.kbooras.etsylistings.service.EtsyService;
+import com.kbooras.etsylistings.service.FindAllFeaturedListingsListener;
+import com.kbooras.etsylistings.service.FindAllFeaturedListingsRequest;
+import com.kbooras.etsylistings.service.FindAllListingActiveListener;
+import com.kbooras.etsylistings.service.FindAllListingActiveRequest;
+import com.kbooras.etsylistings.view.SearchEditText;
 
 import java.util.ArrayList;
 import java.util.List;

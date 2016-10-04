@@ -1,4 +1,4 @@
-package com.kirstiebooras.etsylistings.model;
+package com.kbooras.etsylistings.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

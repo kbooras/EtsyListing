@@ -1,4 +1,4 @@
-package com.kirstiebooras.etsylistings;
+package com.kbooras.etsylistings;
 
 import org.junit.Test;
 

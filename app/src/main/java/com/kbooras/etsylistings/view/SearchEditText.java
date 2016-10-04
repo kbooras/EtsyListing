@@ -1,4 +1,4 @@
-package com.kirstiebooras.etsylistings.view;
+package com.kbooras.etsylistings.view;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -7,7 +7,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.EditText;
 
-import com.kirstiebooras.etsylistings.R;
+import com.kbooras.etsylistings.R;
 
 public class SearchEditText extends EditText {
 

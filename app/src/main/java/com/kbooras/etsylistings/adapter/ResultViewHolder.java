@@ -1,4 +1,4 @@
-package com.kirstiebooras.etsylistings.adapter;
+package com.kbooras.etsylistings.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,8 +8,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.kirstiebooras.etsylistings.R;
-import com.kirstiebooras.etsylistings.model.Result;
+import com.kbooras.etsylistings.R;
+import com.kbooras.etsylistings.model.Result;
 
 import java.util.Currency;
 

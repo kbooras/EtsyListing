@@ -1,11 +1,11 @@
-package com.kirstiebooras.etsylistings.activity;
+package com.kbooras.etsylistings.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.kirstiebooras.etsylistings.R;
+import com.kbooras.etsylistings.R;
 
 public class WebViewActivity extends AppCompatActivity {
 

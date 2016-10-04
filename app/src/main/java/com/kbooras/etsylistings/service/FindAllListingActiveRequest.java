@@ -1,8 +1,8 @@
-package com.kirstiebooras.etsylistings.service;
+package com.kbooras.etsylistings.service;
 
 import android.net.Uri;
 
-import com.kirstiebooras.etsylistings.config.Config;
+import com.kbooras.etsylistings.config.Config;
 
 import java.util.Locale;
 

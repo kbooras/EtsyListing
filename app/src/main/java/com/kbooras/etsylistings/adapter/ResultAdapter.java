@@ -1,4 +1,4 @@
-package com.kirstiebooras.etsylistings.adapter;
+package com.kbooras.etsylistings.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kirstiebooras.etsylistings.R;
-import com.kirstiebooras.etsylistings.activity.WebViewActivity;
-import com.kirstiebooras.etsylistings.model.Result;
+import com.kbooras.etsylistings.R;
+import com.kbooras.etsylistings.activity.WebViewActivity;
+import com.kbooras.etsylistings.model.Result;
 
 import java.util.List;
 

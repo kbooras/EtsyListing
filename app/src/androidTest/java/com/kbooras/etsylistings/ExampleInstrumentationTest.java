@@ -1,4 +1,4 @@
-package com.kirstiebooras.etsylistings;
+package com.kbooras.etsylistings;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

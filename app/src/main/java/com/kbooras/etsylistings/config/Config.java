@@ -1,4 +1,4 @@
-package com.kirstiebooras.etsylistings.config;
+package com.kbooras.etsylistings.config;
 
 public final class Config {
 
